@@ -6,14 +6,35 @@
 //
 import SwiftUI
 
-protocol Router {
-func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping(Router)-> T)
+extension EnvironmentValues {
+    @Entry var router: Router = MockRouter()
 }
+
+protocol Router {
+    func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping(Router)-> T)
+    func dismissScreen()
+}
+
+struct MockRouter: Router {
+    func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping (Router) -> T) {
+        print("Mock Router does not work")
+    }
+    
+    func dismissScreen() {
+        print("Mock Router does not work")
+    }
+}
+
 //<Content: View >: View, Router
 struct RouterModel<Content: View>: View, Router {
-    
+    @Environment(\.dismiss) private var dismiss
     @State private var path: [AnyDestination] = []
+    
+    @State private var showSheet: AnyDestination? = nil
+    @State private var showFullScreenSheet: AnyDestination? = nil
+    
     @Binding var screenStack: [AnyDestination]
+    
     var addNavigationView: Bool = true
     @ViewBuilder var content: (Router) -> Content
     
@@ -29,7 +50,12 @@ struct RouterModel<Content: View>: View, Router {
     }
     
     var body: some View {
-        content(self)
+        NavigationStackIfNeeded(path: $path, addNavigationView: addNavigationView) {
+            content(self)
+                .sheetViewModifier(screen: $showSheet)
+                .fullScreenCoverViewModifier(screen: $showFullScreenSheet)
+        }
+        .environment(\.router, self)
     }
     
     func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping(Router)-> T) {
@@ -40,5 +66,22 @@ struct RouterModel<Content: View>: View, Router {
             
         }
         let destination = AnyDestination(destination: screen)
+        
+        switch option {
+        case .push:
+            if screenStack.isEmpty {
+                path.append(destination)
+            } else {
+                screenStack.append(destination)
+            }
+        case .sheet:
+            showSheet = destination
+        case .fullScreenCover:
+            showFullScreenSheet = destination
+        }
+    }
+    
+    func dismissScreen() {
+        dismiss()
     }
 }

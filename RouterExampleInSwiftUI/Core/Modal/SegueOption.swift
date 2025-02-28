@@ -11,10 +11,10 @@ enum SegueOption {
     
     var addNewNavigationView: Bool {
         switch self {
-        case .push, .fullScreenCover:
-            return true
-        case .sheet:
+        case .push:
             return false
+        case .sheet, .fullScreenCover:
+            return true
         }
     }
 }
