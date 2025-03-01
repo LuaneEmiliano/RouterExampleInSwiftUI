@@ -13,6 +13,7 @@ extension EnvironmentValues {
 protocol Router {
     func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping(Router)-> T)
     func dismissScreen()
+    func showAlert(_ option: AlertType, title: String, subtitle: String?, buttons:(@Sendable () -> AnyView)?)
 }
 
 struct MockRouter: Router {
@@ -21,6 +22,10 @@ struct MockRouter: Router {
     }
     
     func dismissScreen() {
+        print("Mock Router does not work")
+    }
+    
+    func showAlert(_ option: AlertType, title: String, subtitle: String?, buttons:(@Sendable () -> AnyView)?) {
         print("Mock Router does not work")
     }
 }
@@ -32,6 +37,9 @@ struct RouterModel<Content: View>: View, Router {
     
     @State private var showSheet: AnyDestination? = nil
     @State private var showFullScreenSheet: AnyDestination? = nil
+    
+    @State private var alertOption: AlertType = .alert
+    @State private var alert: AnyAppAlert? = nil
     
     @Binding var screenStack: [AnyDestination]
     
@@ -54,6 +62,7 @@ struct RouterModel<Content: View>: View, Router {
             content(self)
                 .sheetViewModifier(screen: $showSheet)
                 .fullScreenCoverViewModifier(screen: $showFullScreenSheet)
+                .showCustomAlert(type: alertOption, alert: $alert)
         }
         .environment(\.router, self)
     }
@@ -83,5 +92,10 @@ struct RouterModel<Content: View>: View, Router {
     
     func dismissScreen() {
         dismiss()
+    }
+    
+    func showAlert(_ option: AlertType, title: String, subtitle: String?, buttons:(@Sendable () -> AnyView)?) {
+        self.alertOption = option
+        self.alert = AnyAppAlert(title: title, subtitle: subtitle, buttons: buttons)
     }
 }

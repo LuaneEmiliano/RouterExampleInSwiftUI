@@ -13,6 +13,7 @@ struct SegueOptionView: View {
     var body: some View {
         List {
             segueSection
+            alertSection
         }
         .navigationTitle("Router Examples")
     }
@@ -47,6 +48,33 @@ struct SegueOptionView: View {
             }
         } header: {
             Text("Push")
+        }
+    }
+    
+    private var alertSection: some View {
+        Section {
+            Button {
+                router.showAlert(.alert, title: "Alert 1", subtitle: "Alert Subtitle", buttons: nil)
+            } label: {
+                Text("Alert")
+            }
+            
+            Button {
+                router.showAlert(.confirmationDialog, title: "Alert 2", subtitle: "Alert 2 subtitle", buttons:  {
+                    AnyView(
+                        Group {
+                            Button("ONE", action: {})
+                            Button("TWO", action: {})
+                            Button("THREE", action: {})
+                        }
+                    )
+                })
+            } label: {
+                Text("Confirmation Dialog")
+            }
+
+        } header: {
+            Text("Alert")
         }
     }
 }
