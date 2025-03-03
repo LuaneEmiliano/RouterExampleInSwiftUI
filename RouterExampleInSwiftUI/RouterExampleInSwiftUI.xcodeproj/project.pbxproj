@@ -8,7 +8,6 @@
 
 /* Begin PBXFileReference section */
 		8F58545B2D724349007B4139 /* RouterExampleInSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RouterExampleInSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F5854912D760D90007B4139 /* RouterExampleInSwiftUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RouterExampleInSwiftUI.xcodeproj; path = RouterExampleInSwiftUI/RouterExampleInSwiftUI.xcodeproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -42,13 +41,6 @@
 			isa = PBXGroup;
 			children = (
 				8F58545B2D724349007B4139 /* RouterExampleInSwiftUI.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		8F5854942D760D90007B4139 /* Products */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,12 +97,6 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8F58545C2D724349007B4139 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 8F5854942D760D90007B4139 /* Products */;
-					ProjectRef = 8F5854912D760D90007B4139 /* RouterExampleInSwiftUI.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8F58545A2D724349007B4139 /* RouterExampleInSwiftUI */,

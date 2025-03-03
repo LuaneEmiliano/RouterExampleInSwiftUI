@@ -14,6 +14,8 @@ protocol Router {
     func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping(Router)-> T)
     func dismissScreen()
     func showAlert(_ option: AlertType, title: String, subtitle: String?, buttons:(@Sendable () -> AnyView)?)
+    func showModal<T: View>(@ViewBuilder destination: @escaping () -> T)
+    func dismissModal()
 }
 
 struct MockRouter: Router {
@@ -28,6 +30,14 @@ struct MockRouter: Router {
     func showAlert(_ option: AlertType, title: String, subtitle: String?, buttons:(@Sendable () -> AnyView)?) {
         print("Mock Router does not work")
     }
+    
+    func showModal<T: View>(@ViewBuilder destination: @escaping () -> T) {
+        print("Mock Router does not work")
+    }
+    
+    func dismissModal() {
+        print("Mock Router does not work")
+    }
 }
 
 //<Content: View >: View, Router
@@ -37,6 +47,7 @@ struct RouterModel<Content: View>: View, Router {
     
     @State private var showSheet: AnyDestination? = nil
     @State private var showFullScreenSheet: AnyDestination? = nil
+    @State private var modal: AnyDestination? = nil
     
     @State private var alertOption: AlertType = .alert
     @State private var alert: AnyAppAlert? = nil
@@ -64,6 +75,7 @@ struct RouterModel<Content: View>: View, Router {
                 .fullScreenCoverViewModifier(screen: $showFullScreenSheet)
                 .showCustomAlert(type: alertOption, alert: $alert)
         }
+        .modalViewModifier(screen: $modal)
         .environment(\.router, self)
     }
     
@@ -97,5 +109,14 @@ struct RouterModel<Content: View>: View, Router {
     func showAlert(_ option: AlertType, title: String, subtitle: String?, buttons:(@Sendable () -> AnyView)?) {
         self.alertOption = option
         self.alert = AnyAppAlert(title: title, subtitle: subtitle, buttons: buttons)
+    }
+    
+    func showModal<T: View>(@ViewBuilder destination: @escaping () -> T) {
+        let destination = AnyDestination(destination: destination())
+        self.modal = destination
+    }
+    
+    func dismissModal() {
+        modal = nil
     }
 }

@@ -14,6 +14,7 @@ struct SegueOptionView: View {
         List {
             segueSection
             alertSection
+            modalSection
         }
         .navigationTitle("Router Examples")
     }
@@ -75,6 +76,27 @@ struct SegueOptionView: View {
 
         } header: {
             Text("Alert")
+        }
+    }
+    
+    private var modalSection: some View {
+        Section {
+            Button {
+                router.showModal {
+                    RoundedRectangle(cornerRadius: 30)
+                        .fill(Color.blue)
+                        .frame(maxHeight: 100)
+                        .padding(40)
+                        .onTapGesture {
+                            router.dismissModal()
+                        }
+                }
+            } label: {
+                Text("Show Modal")
+            }
+            
+        } header: {
+            Text("Show Modal")
         }
     }
 }
